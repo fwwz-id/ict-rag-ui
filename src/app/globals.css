@@ -1,42 +1,177 @@
+@layer theme, base, mui, components, utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: rgb(60, 24, 26);
+  --color-brand-100: rgb(72, 26, 29);
+  --color-brand-200: rgb(84, 27, 31);
+  --color-brand-300: rgb(103, 30, 34);
+  --color-brand-400: rgb(130, 32, 37);
+  --color-brand-500: rgb(170, 36, 41);
+  --color-brand-600: rgb(229, 72, 77);
+  --color-brand-700: rgb(242, 85, 90);
+  --color-brand-800: rgb(255, 99, 105);
+  --color-brand-900: rgb(254, 236, 238);
+
+  --color-neutral-0: rgb(3, 7, 18);
+  --color-neutral-50: rgb(17, 24, 39);
+  --color-neutral-100: rgb(31, 41, 55);
+  --color-neutral-200: rgb(55, 65, 81);
+  --color-neutral-300: rgb(75, 85, 99);
+  --color-neutral-400: rgb(107, 114, 128);
+  --color-neutral-500: rgb(156, 163, 175);
+  --color-neutral-600: rgb(209, 213, 219);
+  --color-neutral-700: rgb(229, 231, 235);
+  --color-neutral-800: rgb(243, 244, 246);
+  --color-neutral-900: rgb(249, 250, 251);
+  --color-neutral-950: rgb(255, 255, 255);
+
+  --color-error-50: rgb(58, 24, 47);
+  --color-error-100: rgb(69, 26, 55);
+  --color-error-200: rgb(80, 27, 63);
+  --color-error-300: rgb(96, 29, 72);
+  --color-error-400: rgb(122, 29, 90);
+  --color-error-500: rgb(167, 24, 115);
+  --color-error-600: rgb(214, 64, 159);
+  --color-error-700: rgb(227, 75, 169);
+  --color-error-800: rgb(246, 92, 182);
+  --color-error-900: rgb(254, 235, 247);
+
+  --color-warning-50: rgb(44, 33, 0);
+  --color-warning-100: rgb(53, 40, 0);
+  --color-warning-200: rgb(62, 48, 0);
+  --color-warning-300: rgb(73, 60, 0);
+  --color-warning-400: rgb(89, 74, 5);
+  --color-warning-500: rgb(112, 94, 0);
+  --color-warning-600: rgb(245, 217, 10);
+  --color-warning-700: rgb(255, 239, 92);
+  --color-warning-800: rgb(240, 192, 0);
+  --color-warning-900: rgb(255, 250, 209);
+
+  --color-success-50: rgb(15, 41, 30);
+  --color-success-100: rgb(17, 49, 35);
+  --color-success-200: rgb(19, 57, 41);
+  --color-success-300: rgb(22, 68, 48);
+  --color-success-400: rgb(27, 84, 58);
+  --color-success-500: rgb(35, 110, 74);
+  --color-success-600: rgb(48, 164, 108);
+  --color-success-700: rgb(60, 177, 121);
+  --color-success-800: rgb(76, 195, 138);
+  --color-success-900: rgb(229, 251, 235);
+
+  --color-disabled: var(--color-neutral-500);
+
+  --color-background: linear-gradient(
+    90deg,
+    rgba(253, 230, 238, 1) 0%,
+    rgba(255, 228, 230, 1) 50%,
+    rgba(253, 165, 213, 0.7) 75%,
+    rgba(252, 206, 232, 1) 100%
+  );
+  --color-foreground: var(--color-neutral-500);
+
+  --mui-text-color-primary: #e92c76;
+  --color-primary: var(--mui-text-color-primary);
+
+  --animate-rotate: rotate 10s cubic-bezier(0, 0, 1, 1) 2s infinite;
+
+  @keyframes rotate {
+    100% {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+}
+
+/* Material UI base styles */
+@layer base {
+  h1 {
+    font:
+      var(--font-weight-bold) var(--text-4xl) / var(--text-4xl--line-height)
+      var(--font-sans);
+    letter-spacing: var(--tracking-tighter);
+  }
+  h2 {
+    font:
+      var(--font-weight-bold) var(--text-3xl) / var(--text-3xl--line-height)
+      var(--font-sans);
+    letter-spacing: var(--tracking-tighter);
+  }
+  h3 {
+    font:
+      var(--font-weight-bold) var(--text-2xl) / var(--text-2xl--line-height)
+      var(--font-sans);
+  }
+  h4 {
+    font:
+      var(--font-weight-bold) var(--text-xl) / var(--text-xl--line-height)
+      var(--font-sans);
+    letter-spacing: var(--tracking-tighter);
+  }
+  h5 {
+    font:
+      var(--font-weight-bold) var(--text-xl) / var(--text-xl--line-height)
+      var(--font-sans);
+  }
+  h6 {
+    font:
+      var(--font-weight-bold) var(--text-xl) / var(--text-xl--line-height)
+      var(--font-sans);
+    letter-spacing: 0.0075em;
+  }
+  p {
+    font:
+      var(--font-weight-light) var(--text-base) / var(--text-base--line-height)
+      var(--font-sans);
+    letter-spacing: 0.00938em;
+  }
+  span {
+    font:
+      var(--font-weight-light) var(--text-sm) / var(--text-sm--line-height)
+      var(--font-sans);
+    letter-spacing: 0.01071em;
+  }
+
+  ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+  }
+
+  ol {
+    list-style-type: decimal;
+    padding-left: 1.5rem;
+  }
+
+  a {
+    text-decoration: underline;
+    color: var(--mui-text-color-primary);
+  }
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  --font-sans: var(--font-roboto);
+  --color-background: linear-gradient(
+    90deg,
+    rgba(253, 230, 238, 1) 0%,
+    rgba(255, 228, 230, 1) 50%,
+    rgba(253, 165, 213, 0.7) 75%,
+    rgba(252, 206, 232, 1) 100%
+  );
+  --color-foreground: var(--color-foreground);
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+.bg {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 200svw;
+  height: 200svw;
+  background-image: var(--color-background);
+  background-blend-mode: screen;
+  animation: var(--animate-rotate);
+  transform: translate(-50%, -50%) rotate(0);
 }
