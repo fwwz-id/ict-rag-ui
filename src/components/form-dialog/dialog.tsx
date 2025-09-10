@@ -1,7 +1,5 @@
 "use client";
 
-import type { FormEvent } from "react";
-
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -9,20 +7,34 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
-
-import { useRootContext } from "~/context/root-context";
 import Typography from "@mui/material/Typography";
 
-export default function FormDialog() {
-  const { isFormDialogOpen: open, toggleFormDialog: handleClose } =
-    useRootContext();
+import type { AIConfig } from "./action";
 
-  // biome-ignore lint/correctness/noUnusedFunctionParameters: temporary disable
-  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {};
+import { useFormDialogContext } from "~/context/form-dialog-context";
+import { useFormDialog } from "./use-form-dialog";
+
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+
+export default function FormDialog({ config }: { config: AIConfig }) {
+  const { isFormDialogOpen, toggleFormDialog } = useFormDialogContext();
+  const {
+    options,
+    selectedModel,
+    apiKeyValue,
+    baseURLValue,
+    onChange,
+    onSubmit,
+    isAPIKeyShown,
+    toggleAPIKeyShown,
+  } = useFormDialog({ config });
 
   return (
-    <Dialog fullWidth open={open} onClose={handleClose}>
+    <Dialog fullWidth open={isFormDialogOpen} onClose={toggleFormDialog}>
       <DialogTitle>Settings</DialogTitle>
       <DialogContent>
         <DialogContentText>
@@ -32,7 +44,7 @@ export default function FormDialog() {
             We only support OpenAI REST API specification at the moment.
           </Typography>
         </DialogContentText>
-        <form onSubmit={handleSubmit} id="ai-configuration">
+        <form id="ai-configuration">
           <TextField
             autoFocus
             required
@@ -42,8 +54,10 @@ export default function FormDialog() {
             label="Base URL"
             type="text"
             fullWidth
-            placeholder="https://api.openai.com or http://127.0.0.1:11434/v1"
+            placeholder="https://api.openai.com, http://127.0.0.1:11434/v1 or https://ai.sumopod.com/v1"
             variant="standard"
+            value={baseURLValue}
+            onChange={(evt) => onChange("baseURL", evt.target.value)}
           />
 
           <TextField
@@ -53,27 +67,39 @@ export default function FormDialog() {
             id="api-key"
             name="api-key"
             label="API Key"
-            type="text"
+            type={isAPIKeyShown ? "text" : "password"}
             fullWidth
             placeholder="sk-xxxx..."
             variant="standard"
+            value={apiKeyValue}
+            onChange={(evt) => onChange("apiKey", evt.target.value)}
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={toggleAPIKeyShown}>
+                      {isAPIKeyShown ? (
+                        <VisibilityOffIcon />
+                      ) : (
+                        <VisibilityIcon />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
+            }}
           />
 
           <Autocomplete
             disablePortal
             autoFocus
             id="model"
-            options={[
-              "gpt-5",
-              "gpt-5-chat",
-              "gpt-5-mini",
-              "gpt-5-nano",
-              "gpt-4.1",
-              "gpt-4.1-mini",
-              "gpt-4.1-nano",
-              "gemini/gemini-2.0-flash",
-              "gemini/gemini-2.5-flash",
-            ]}
+            options={options}
+            groupBy={(option) => option.provider}
+            getOptionLabel={(option) => option.model}
+            value={selectedModel}
+            // biome-ignore lint/style/noNonNullAssertion: always string, this will checked by zod.
+            onChange={(_, value) => onChange("model", value?.model!)}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -89,10 +115,10 @@ export default function FormDialog() {
         </form>
       </DialogContent>
       <DialogActions>
-        <Button className="text-disabled" onClick={handleClose}>
+        <Button className="text-disabled" onClick={toggleFormDialog}>
           Cancel
         </Button>
-        <Button type="submit" form="subscription-form">
+        <Button form="subscription-form" onClick={onSubmit}>
           Save
         </Button>
       </DialogActions>

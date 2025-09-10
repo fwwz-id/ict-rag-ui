@@ -86,49 +86,92 @@
 @layer base {
   h1 {
     font:
-      var(--font-weight-bold) var(--text-4xl) / var(--text-4xl--line-height)
+      var(--font-weight-bold) var(--text-3xl) / var(--text-3xl--line-height)
       var(--font-sans);
     letter-spacing: var(--tracking-tighter);
   }
   h2 {
     font:
-      var(--font-weight-bold) var(--text-3xl) / var(--text-3xl--line-height)
+      var(--font-weight-bold) var(--text-2xl) / var(--text-2xl--line-height)
       var(--font-sans);
     letter-spacing: var(--tracking-tighter);
   }
   h3 {
     font:
-      var(--font-weight-bold) var(--text-2xl) / var(--text-2xl--line-height)
+      var(--font-weight-bold) var(--text-xl) / var(--text-xl--line-height)
       var(--font-sans);
   }
   h4 {
     font:
-      var(--font-weight-bold) var(--text-xl) / var(--text-xl--line-height)
+      var(--font-weight-bold) var(--text-lg) / var(--text-lg--line-height)
       var(--font-sans);
     letter-spacing: var(--tracking-tighter);
   }
   h5 {
     font:
-      var(--font-weight-bold) var(--text-xl) / var(--text-xl--line-height)
+      var(--font-weight-bold) var(--text-lg) / var(--text-lg--line-height)
       var(--font-sans);
   }
   h6 {
     font:
-      var(--font-weight-bold) var(--text-xl) / var(--text-xl--line-height)
+      var(--font-weight-bold) var(--text-base) / var(--text-base--line-height)
       var(--font-sans);
     letter-spacing: 0.0075em;
   }
   p {
     font:
-      var(--font-weight-light) var(--text-base) / var(--text-base--line-height)
+      var(--font-weight-light) var(--text-sm) / var(--text-sm--line-height)
       var(--font-sans);
     letter-spacing: 0.00938em;
   }
   span {
     font:
-      var(--font-weight-light) var(--text-sm) / var(--text-sm--line-height)
+      var(--font-weight-light) var(--text-xs) / var(--text-xs--line-height)
       var(--font-sans);
     letter-spacing: 0.01071em;
+  }
+
+  @media (min-width: 1024px) {
+    h1 {
+      font:
+        var(--font-weight-bold) var(--text-4xl) / var(--text-4xl--line-height)
+        var(--font-sans);
+    }
+    h2 {
+      font:
+        var(--font-weight-bold) var(--text-3xl) / var(--text-3xl--line-height)
+        var(--font-sans);
+    }
+    h3 {
+      font:
+        var(--font-weight-bold) var(--text-2xl) / var(--text-2xl--line-height)
+        var(--font-sans);
+    }
+    h4 {
+      font:
+        var(--font-weight-bold) var(--text-xl) / var(--text-xl--line-height)
+        var(--font-sans);
+    }
+    h5 {
+      font:
+        var(--font-weight-bold) var(--text-xl) / var(--text-xl--line-height)
+        var(--font-sans);
+    }
+    h6 {
+      font:
+        var(--font-weight-bold) var(--text-xl) / var(--text-xl--line-height)
+        var(--font-sans);
+    }
+    p {
+      font:
+        var(--font-weight-light) var(--text-base) / var(--text-base--line-height)
+        var(--font-sans);
+    }
+    span {
+      font:
+        var(--font-weight-light) var(--text-sm) / var(--text-sm--line-height)
+        var(--font-sans);
+    }
   }
 
   ul {
@@ -168,10 +211,14 @@ body {
   position: fixed;
   top: 50%;
   left: 50%;
-  width: 200svw;
-  height: 200svw;
+  /* width: 200svw; */
+  /* height: 200svw; */
   background-image: var(--color-background);
   background-blend-mode: screen;
   animation: var(--animate-rotate);
   transform: translate(-50%, -50%) rotate(0);
+}
+
+.MuiBackdrop-root {
+  backdrop-filter: blur(2px);
 }

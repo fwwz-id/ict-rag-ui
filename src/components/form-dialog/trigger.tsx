@@ -2,15 +2,18 @@
 
 import IconButton from "@mui/material/IconButton";
 import SettingsIcon from "@mui/icons-material/Settings";
+import Tooltip from "@mui/material/Tooltip";
 
-import { useRootContext } from "~/context/root-context";
+import { useFormDialogContext } from "~/context/form-dialog-context";
 
 export default function FormDialogTrigger() {
-  const { toggleFormDialog } = useRootContext();
+  const { toggleFormDialog } = useFormDialogContext();
 
   return (
-    <IconButton color="primary" onClick={toggleFormDialog}>
-      <SettingsIcon />
-    </IconButton>
+    <Tooltip title="Config AI">
+      <IconButton color="primary" onClick={toggleFormDialog}>
+        <SettingsIcon />
+      </IconButton>
+    </Tooltip>
   );
 }

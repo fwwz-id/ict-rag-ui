@@ -1,7 +1,11 @@
 export const MARKDOWN_CHATS = [
   {
-    client: `Bagaimana cara mengajukan passport?`,
-    agent: `# Cara mengurus passport
+    role: "user",
+    content: `Bagaimana cara mengajukan passport?`,
+  },
+  {
+    role: "assistant",
+    content: `# Cara mengurus passport
 
 Untuk mengurus passport di Indonesia, ikuti langkah-langkah berikut:
 
@@ -29,8 +33,12 @@ Untuk mengurus passport di Indonesia, ikuti langkah-langkah berikut:
 `,
   },
   {
-    client: `Saya perlu legalisir dokumen untuk keperluan beasiswa. Bagaimana prosedurnya di kedutaan?`,
-    agent: `# Legalisir Dokumen di Kedutaan
+    role: "user",
+    content: `Saya perlu legalisir dokumen untuk keperluan beasiswa. Bagaimana prosedurnya di kedutaan?`,
+  },
+  {
+    role: "assistant",
+    content: `# Legalisir Dokumen di Kedutaan
 
 Untuk legalisir dokumen di kedutaan, berikut prosedur yang harus diikuti:
 
@@ -61,8 +69,12 @@ Untuk legalisir dokumen di kedutaan, berikut prosedur yang harus diikuti:
 `,
   },
   {
-    client: `Bagaimana cara perpanjang SIM di Indonesia?`,
-    agent: `# Perpanjangan SIM
+    role: "user",
+    content: `Bagaimana cara perpanjang SIM di Indonesia?`,
+  },
+  {
+    role: "assistant",
+    content: `# Perpanjangan SIM
 
 Untuk memperpanjang Surat Izin Mengemudi (SIM) di Indonesia, ikuti langkah-langkah berikut:
 
@@ -88,8 +100,12 @@ Untuk memperpanjang Surat Izin Mengemudi (SIM) di Indonesia, ikuti langkah-langk
 `,
   },
   {
-    client: `Saya mau daftar BPJS Kesehatan, bagaimana caranya?`,
-    agent: `# Pendaftaran BPJS Kesehatan
+    role: "user",
+    content: `Saya mau daftar BPJS Kesehatan, bagaimana caranya?`,
+  },
+  {
+    role: "assistant",
+    content: `# Pendaftaran BPJS Kesehatan
 
 ## Persyaratan Dokumen
 - KTP dan KK asli + fotokopi
@@ -113,8 +129,12 @@ Untuk memperpanjang Surat Izin Mengemudi (SIM) di Indonesia, ikuti langkah-langk
 `,
   },
   {
-    client: `Bagaimana prosedur membuat NPWP untuk karyawan baru?`,
-    agent: `# Cara Membuat NPWP (Nomor Pokok Wajib Pajak)
+    role: "user",
+    content: `Bagaimana prosedur membuat NPWP untuk karyawan baru?`,
+  },
+  {
+    role: "assistant",
+    content: `# Cara Membuat NPWP (Nomor Pokok Wajib Pajak)
 
 ## Dokumen yang Dibutuhkan
 - KTP asli dan fotokopi

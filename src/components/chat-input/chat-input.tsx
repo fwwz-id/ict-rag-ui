@@ -9,14 +9,22 @@ import SendIcon from "@mui/icons-material/Send";
 import useChatInput from "./use-chat-input";
 
 export default function ChatInput() {
-  const { isDisabled, placeholder, onBlur, onChange, onSubmitForm, onKeyDown } =
-    useChatInput();
+  const {
+    chatInput,
+    isDisabled,
+    placeholder,
+    onBlur,
+    onChange,
+    onSubmitForm,
+    onKeyDown,
+  } = useChatInput();
 
   return (
     <form className="w-full" onSubmit={onSubmitForm}>
       <TextField
         label="Tanyakan sesuatu"
         placeholder={placeholder}
+        value={chatInput}
         fullWidth
         multiline
         onChange={onChange}

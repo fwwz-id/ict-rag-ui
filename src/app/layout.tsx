@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={roboto.variable} suppressHydrationWarning>
       <body>
-        <div className="bg" />
+        <div className="bg w-[300svw] h-[300svw] md:w-[200svw] md:h-[200svw]" />
         <AppRouterCacheProvider options={{ enableCssLayer: true }}>
           <ThemeProvider theme={theme}>{children}</ThemeProvider>
         </AppRouterCacheProvider>

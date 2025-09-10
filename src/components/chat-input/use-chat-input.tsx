@@ -6,6 +6,7 @@ import type {
   KeyboardEvent as ReactKeyboardEvent,
 } from "react";
 import { useEffect, useState } from "react";
+import { useConversation } from "~/context/conversation-context";
 
 export default function useChatInput() {
   const placeholders = [
@@ -22,18 +23,69 @@ export default function useChatInput() {
   const [chatInput, setChatInput] = useState("");
   const [isDisabled, setIsDisabled] = useState(true);
 
+  const {
+    conversations,
+    updateLatestConversation,
+    pushConversation,
+    setLoadingFalse,
+    setLoadingTrue,
+  } = useConversation();
+
   const pickRandomPlaceholder = () =>
     setPlaceholder(
       placeholders[Math.floor(Math.random() * placeholders.length)],
     );
 
-  const submit = () => {
+  const clearChatInput = () => setChatInput("");
+
+  const submit = async () => {
     if (chatInput === "") return;
+    setLoadingTrue();
+    clearChatInput();
+
+    const newMessage = { role: "user", content: chatInput } as const;
+    const updatedConversations = [...conversations, newMessage];
+
+    pushConversation(newMessage);
+
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      body: JSON.stringify(updatedConversations),
+    });
+
+    if (!response.ok) {
+      console.log("Error guys!");
+      return;
+    }
+
+    if (!response.body) {
+      console.log("Error stream text!");
+      return;
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    const read = async () => {
+      setLoadingFalse();
+
+      const { done, value } = await reader.read();
+
+      if (done) return;
+
+      updateLatestConversation(decoder.decode(value));
+
+      read();
+    };
+
+    read();
+
+    // return;
   };
 
-  const onSubmitForm = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmitForm = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    submit();
+    await submit();
   };
 
   const onChange = (
@@ -76,5 +128,13 @@ export default function useChatInput() {
     pickRandomPlaceholder();
   }, []);
 
-  return { isDisabled, placeholder, onBlur, onChange, onSubmitForm, onKeyDown };
+  return {
+    chatInput,
+    isDisabled,
+    placeholder,
+    onBlur,
+    onChange,
+    onSubmitForm,
+    onKeyDown,
+  };
 }
