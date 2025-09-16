@@ -78,13 +78,15 @@ const ChatMessages = memo(function ChatMessages({
     }
   }, [isSubmitted, isIdle, scrollToBottom]);
 
+  const messageCount = useMemo(() => messages.length, [messages]);
+
   // When a new assistant message appears, smoothly reveal it if pinned
   const lastAssistantIndex = useMemo(() => {
-    for (let i = messages.length - 1; i >= 0; i--) {
+    for (let i = messageCount - 1; i >= 0; i--) {
       if (messages[i].role === "assistant") return i;
     }
     return -1;
-  }, [messages]);
+  }, [messageCount, messages]);
 
   useEffect(() => {
     const currentId =
@@ -105,7 +107,8 @@ const ChatMessages = memo(function ChatMessages({
     <Box
       ref={listRef}
       className={cn(
-        "flex-1 overflow-y-auto overflow-x-hidden px-1 sm:px-3 py-2 sm:py-3",
+        messageCount > 0 ? "overflow-y-auto" : "overflow-y-hidden",
+        "flex-1 overflow-x-hidden px-1 sm:px-3 py-2 sm:py-3",
         "h-full scroll-smooth",
         // For sticky FAB positioning within the scroll container
         "relative",
