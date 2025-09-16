@@ -1,0 +1,22 @@
+Built for me a chatbot UI, here are the features wanted:
+
+1. User must set their baseURL, api key, and models at the first place. (sidebar, dialog, whatever).
+2. The provider could be from any as long as they support OpenAPI specification. e.g sumpod, openrouter, aistudio.google.com, etc.
+3. The API is ready, but you could refactor it to make it better. API /api/chat
+4. The UI should use streamChat and use openai.chat(model) not openai.completion(model) AND/OR openai.response(model) AND/OR openai(model).
+5. The UI should also gives good UX by shows the step, e.g: tool call, reasoning/thinking.
+6. User can retry, cancel/abort, clear chat, edit prompt (only latest prompt).
+7. The chat UI should have branch. The Branch component manages multiple versions of AI messages, allowing users to navigate between different response branches. It provides a clean, modern interface with customizable themes and keyboard-accessible navigation buttons.
+9. Prompt input UI could only take text input.
+10. The UI should have a suggestion prompt at the first place.
+11. The UI should built using MUI and TailwindCSS.
+12. The Chat persist, when user create a new chat, rewrite the page to /:id gracefully, make sure to not error 
+
+Please refer to guides, you can found in the same folder
+/home/fwwz/Personal/projects/jsts/kdei-taipei-chat/llm/{cookbook,core,ui}
+
+cookbook are articles that help you to achieve complex goal
+core are guide on how to use ai sdk (ai, @ai-sdk/openai, etc.)
+ui are guid on how to use (@ai-sdk/react)
+
+NOTES: do not use any unless there are no choice. 'any' is not allowed!.

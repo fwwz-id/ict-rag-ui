@@ -1,6 +1,8 @@
 @layer theme, base, mui, components, utilities;
 @import "tailwindcss";
 
+@source "../../node_modules/streamdown/dist/index.js";
+
 @theme {
   --color-brand-50: rgb(60, 24, 26);
   --color-brand-100: rgb(72, 26, 29);
@@ -118,7 +120,8 @@
       var(--font-sans);
     letter-spacing: 0.0075em;
   }
-  p {
+  p,
+  li {
     font:
       var(--font-weight-light) var(--text-sm) / var(--text-sm--line-height)
       var(--font-sans);
@@ -164,8 +167,8 @@
     }
     p {
       font:
-        var(--font-weight-light) var(--text-base) / var(--text-base--line-height)
-        var(--font-sans);
+        var(--font-weight-light) var(--text-base) /
+        var(--text-base--line-height) var(--font-sans);
     }
     span {
       font:

@@ -2,15 +2,21 @@ import type { NextRequest } from "next/server";
 
 import { cookies } from "next/headers";
 import { createOpenAI } from "@ai-sdk/openai";
-import { streamText } from "ai";
+import {
+  streamText,
+  convertToModelMessages,
+  type UIMessage,
+  stepCountIs,
+} from "ai";
 import { ZodError } from "zod/v4";
 
-import { type ConversationSchema, conversationSchema } from "./validation";
+import { conversationSchema } from "./validation";
 import { AppError } from "~/exception";
+
+import { getInformationTool, IS_DEBUG } from "./lib";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = (await request.json()) as ConversationSchema;
     const cookieStore = await cookies();
 
     const apiKey = cookieStore.get("apiKey")?.value;
@@ -19,11 +25,30 @@ export async function POST(request: NextRequest) {
 
     if (!apiKey || !model || !baseURL) {
       throw new AppError("Invalid configuration", 400, [
-        "Please check your configuration",
+        "Please check your configuration. Make sure API Key, Base URL, and Model are all set.",
       ]);
     }
 
-    await conversationSchema.parseAsync(body);
+    const requestData = await request.json();
+
+    // Validate the request data using our schema
+    const validatedData = await conversationSchema.parseAsync(requestData);
+
+    if (IS_DEBUG) {
+      console.log("Request data:", requestData);
+      console.log("Validated data:", validatedData);
+    }
+
+    // Extract messages from AI SDK request format
+    const messages = validatedData.messages as UIMessage[];
+
+    // Convert UIMessages to core messages for streamText
+    const coreMessages = convertToModelMessages(messages);
+
+    if (IS_DEBUG) {
+      console.log("UI Messages:", messages);
+      console.log("Core Messages:", coreMessages);
+    }
 
     const openai = createOpenAI({
       baseURL,
@@ -32,19 +57,41 @@ export async function POST(request: NextRequest) {
 
     const result = streamText({
       model: openai.chat(model),
-      system:
-        `You're a customer service of KDEI Taipei (unofficial embassy of indonesia in taiwan) that responds with context provided.
-        If you're not sure about something, just say you don't know.
-        if user only greet you without other follow up questions, greet them by '<greetings>!, Could you please tell me whats your name and how can I help you today?'.
-        Make sure to answer with the same language as the user.
-        Please keep your answers concise and to the point. use casual and exited tone, also response with markdown.`.trim(),
-      messages: body,
-      temperature: 0.4,
+      system: `You're a KDEI Taipei customer service agent. You MUST ALWAYS use the tool for EVERY user message before providing any response.
+
+    website to search: https://kdei-taipei.org
+
+    RESPONSE RULES:
+    - Base ALL answers on retrieved information from tool when available
+    - If relevant info found: Provide comprehensive, helpful response using that data
+    - If no relevant info after all attempts: "I don't have specific information about that in our database, but I'm happy to help with other KDEI Taipei questions."
+    - Make sure to retrieve as much as you can
+    - Always acknowledge what you found (or didn't find) in the database
+    - Keep responses concise, casual, and use markdown formatting
+    - Match the user's language (Indonesian/English/Chinese)
+
+    CRITICAL: You cannot provide any response without first attempting to retrieve information from the tool.`,
+      messages: coreMessages,
+      stopWhen: stepCountIs(5),
+      onFinish: async (event) => {
+        if (IS_DEBUG) {
+          console.log("Token usage:", event.usage);
+          console.log("Tool calls:", event.toolCalls);
+          console.log("Tool results:", event.toolResults);
+        }
+      },
+      tools: {
+        getInformationTool,
+        webSearch: openai.tools.webSearch(),
+      },
     });
 
-    return result.toTextStreamResponse();
+    return result.toUIMessageStreamResponse();
   } catch (error: unknown) {
     if (error instanceof ZodError) {
+      if (IS_DEBUG) {
+        console.log("Validation error:", error.issues);
+      }
       return Response.json(
         {
           message: "Unprocessable Entity.",
@@ -52,7 +99,7 @@ export async function POST(request: NextRequest) {
         },
         {
           status: 422,
-        }
+        },
       );
     }
 
@@ -62,19 +109,19 @@ export async function POST(request: NextRequest) {
           message: error.message,
           error: error.details,
         },
-        { status: error.code }
+        { status: error.code },
       );
     }
 
     const e = error as Error;
-    console.log(e);
+    if (IS_DEBUG) console.log(e.message, e.stack);
 
     return Response.json(
       {
         message: e.message,
         error: e.stack,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
